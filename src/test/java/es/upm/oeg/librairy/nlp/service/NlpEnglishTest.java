@@ -24,7 +24,7 @@ public class NlpEnglishTest {
 
     @Before
     public void setup(){
-        service = new CoreNLPService("en");
+        service = new CoreNLPService("en", "src/main/bin");
     }
 
     @Test
@@ -34,7 +34,7 @@ public class NlpEnglishTest {
 
         List<PoS> filter = Collections.emptyList();
 
-        List<Annotation> annotations = service.annotations(text, filter);
+        List<Annotation> annotations = service.annotations(text, filter, false);
 
         annotations.forEach(annotation -> System.out.println("Annotation: " + annotation));
 

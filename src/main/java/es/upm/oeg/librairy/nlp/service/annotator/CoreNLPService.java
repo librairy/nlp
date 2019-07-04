@@ -3,6 +3,7 @@ package es.upm.oeg.librairy.nlp.service.annotator;
 import com.google.common.base.Strings;
 import edu.stanford.nlp.pipeline.Annotation;
 import es.upm.oeg.librairy.nlp.annotators.stanford.*;
+import es.upm.oeg.librairy.nlp.annotators.wordnet.*;
 import org.librairy.service.nlp.facade.model.Form;
 import org.librairy.service.nlp.facade.model.PoS;
 import org.slf4j.Logger;
@@ -25,22 +26,27 @@ public class CoreNLPService implements AnnotatorService{
     private static final Logger LOG = LoggerFactory.getLogger(CoreNLPService.class);
     private final String lang;
 
-    protected StanfordAnnotator annotator;
+    protected StanfordAnnotator stanfordAnnotator;
+    protected WordnetAnnotator wordnetAnnotator;
 
-    public CoreNLPService(String lang) {
+    public CoreNLPService(String lang, String resourceFolder) {
         this.lang = lang.toLowerCase();
         switch (this.lang){
             case "en":
-                annotator = new StanfordAnnotatorEN();
+                stanfordAnnotator = new StanfordAnnotatorEN();
+                wordnetAnnotator  = new WordnetAnnotatorEN(resourceFolder);
                 break;
             case "es":
-                annotator = new StanfordAnnotatorES();
+                stanfordAnnotator = new StanfordAnnotatorES();
+                wordnetAnnotator  = new WordnetAnnotatorES(resourceFolder);
                 break;
             case "de":
-                annotator = new StanfordAnnotatorDE();
+                stanfordAnnotator = new StanfordAnnotatorDE();
+                wordnetAnnotator  = new WordnetAnnotatorDE(resourceFolder);
                 break;
             case "fr":
-                annotator = new StanfordAnnotatorFR();
+                stanfordAnnotator = new StanfordAnnotatorFR();
+                wordnetAnnotator  = new WordnetAnnotatorFR(resourceFolder);
                 break;
         }
     }
@@ -48,12 +54,12 @@ public class CoreNLPService implements AnnotatorService{
     public String tokens(String text, List<PoS> filter, Form form) {
         if (Strings.isNullOrEmpty(text)) return "";
 
-        return annotations(text, filter).stream()
+        return annotations(text, filter, false).stream()
                 .map(annotation -> (form.equals(Form.LEMMA) ? annotation.getToken().getLemma() : annotation.getToken().getTarget()))
                 .collect(Collectors.joining(" "));
     }
 
-    public List<org.librairy.service.nlp.facade.model.Annotation> annotations(String text, List<PoS> filter){
+    public List<org.librairy.service.nlp.facade.model.Annotation> annotations(String text, List<PoS> filter, Boolean synset){
         if (Strings.isNullOrEmpty(text)) return Collections.emptyList();
 
         List<org.librairy.service.nlp.facade.model.Annotation> tokens = new ArrayList<>();
@@ -63,7 +69,7 @@ public class CoreNLPService implements AnnotatorService{
 
             String partialContent = matcher.group();
             Instant startAnnotation = Instant.now();
-            Annotation annotation = annotator.annotate(partialContent);
+            Annotation annotation = stanfordAnnotator.annotate(partialContent);
             Instant endAnnotation = Instant.now();
             LOG.debug("Annotated by CoreNLP in: " +
                     ChronoUnit.MINUTES.between(startAnnotation,endAnnotation) + "min " +
@@ -71,12 +77,15 @@ public class CoreNLPService implements AnnotatorService{
 
             try{
                 Instant startTokenizer = Instant.now();
-                List<org.librairy.service.nlp.facade.model.Annotation> annotations = annotator.tokenize(annotation);
+                List<org.librairy.service.nlp.facade.model.Annotation> annotations = stanfordAnnotator.tokenize(annotation);
                 Instant endTokenizer = Instant.now();
                 LOG.debug("Parsed  into " + annotations.size() + " annotations  in: " +
                         ChronoUnit.MINUTES.between(startTokenizer,endTokenizer) + "min " + (ChronoUnit.SECONDS.between(startTokenizer,endTokenizer)%60) + "secs");
                 for(org.librairy.service.nlp.facade.model.Annotation a: annotations){
                     a.setOffset((groupIndex*1000)+a.getOffset());
+                }
+                if (synset){
+                    annotations.forEach(a -> a.setSynset(wordnetAnnotator.getSynset(a.getToken().getLemma())));
                 }
                 tokens.addAll(annotations);
             }catch (Exception e){

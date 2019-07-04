@@ -13,5 +13,5 @@ public interface AnnotatorService {
 
     String tokens(String text, List<PoS> filter, Form form);
 
-    List<Annotation> annotations(String text, List<PoS> filter);
+    List<Annotation> annotations(String text, List<PoS> filter, Boolean synsets);
 }

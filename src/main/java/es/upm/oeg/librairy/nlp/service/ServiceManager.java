@@ -3,12 +3,14 @@ package es.upm.oeg.librairy.nlp.service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import es.upm.oeg.librairy.nlp.service.annotator.*;
+import es.upm.oeg.librairy.nlp.service.annotator.AnnotatorService;
+import es.upm.oeg.librairy.nlp.service.annotator.CoreNLPService;
+import es.upm.oeg.librairy.nlp.service.annotator.DBpediaService;
+import es.upm.oeg.librairy.nlp.service.annotator.IXAService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.thymeleaf.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutionException;
@@ -55,13 +57,14 @@ public class ServiceManager {
                                     String lang = req.getLang().toLowerCase();
                                     switch (lang){
                                         case "en":
-                                            return (req.getMultigram())? new WordnetService(resourceFolder, lang) : new CoreNLPService(lang);
+                                            //return (req.getMultigram())? new WordnetService(resourceFolder, lang) : new CoreNLPService(lang);
+                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
                                         case "es":
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram())) : new IXAService(resourceFolder,lang, req.getMultigram());
+                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
                                         case "de":
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang)) : new CoreNLPService(lang);
+                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
                                         case "fr":
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang)) : new CoreNLPService(lang);
+                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
                                         default:
                                             LOG.error("language '"+ lang + "' not supported");
                                             throw new RuntimeException("language not supported: " + lang);

@@ -1,7 +1,7 @@
 package es.upm.oeg.librairy.nlp.service;
 
 import es.upm.oeg.librairy.nlp.service.annotator.CoreNLPService;
-import es.upm.oeg.librairy.nlp.service.annotator.WordnetService;
+import es.upm.oeg.librairy.nlp.service.annotator.MultiwordService;
 import org.junit.Before;
 import org.junit.Test;
 import org.librairy.service.nlp.facade.model.Annotation;
@@ -25,7 +25,7 @@ public class NlpEnglishWordnetTest {
 
     @Before
     public void setup(){
-        service = new WordnetService("src/main/bin","en");
+        service = new MultiwordService("src/main/bin","en");
     }
 
     @Test
@@ -35,7 +35,7 @@ public class NlpEnglishWordnetTest {
 
         List<PoS> filter = Collections.emptyList();
 
-        List<Annotation> annotations = service.annotations(text, filter);
+        List<Annotation> annotations = service.annotations(text, filter, false);
 
         annotations.forEach(annotation -> System.out.println("Annotation: " + annotation));
 

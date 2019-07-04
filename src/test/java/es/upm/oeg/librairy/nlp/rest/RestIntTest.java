@@ -75,7 +75,7 @@ public class RestIntTest {
 
         List<PoS> types = Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB});
         String text = "este es el texto que va a ser analizado";
-        AnnotationsRequest req = new AnnotationsRequest(text,types, false,false,"es");
+        AnnotationsRequest req = new AnnotationsRequest(text,types, false,false,false,"es");
 
         HttpResponse<JsonNode> response = Unirest.post("http://librairy.linkeddata.es/es/annotations")
                 .header("accept", "application/json")
@@ -93,7 +93,7 @@ public class RestIntTest {
 
         List<PoS> types = Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB});
         String text = "este es el texto que va a ser analizado";
-        GroupsRequest req = new GroupsRequest(text,types, false,false,"es");
+        GroupsRequest req = new GroupsRequest(text,types, false,false,false,"es");
 
         HttpResponse<JsonNode> response = Unirest.post("http://librairy.linkeddata.es/es/groups")
                 .header("accept", "application/json")

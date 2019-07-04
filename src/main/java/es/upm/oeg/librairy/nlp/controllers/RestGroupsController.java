@@ -60,7 +60,7 @@ public class RestGroupsController {
 
             String lang = Strings.isNullOrEmpty(request.getLang())? languageService.getLanguage(request.getText()) : request.getLang();
 
-            GroupsResult groups = new GroupsResult(service.groups(request.getText(), request.getFilter(), request.getMultigrams(), request.getReferences(), lang).stream().map(t -> new Group(t)).collect(Collectors.toList()));
+            GroupsResult groups = new GroupsResult(service.groups(request.getText(), request.getFilter(), request.getMultigrams(), request.getReferences(), request.getSynset(), lang).stream().map(t -> new Group(t)).collect(Collectors.toList()));
             return new ResponseEntity( groups, HttpStatus.OK);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down", HttpStatus.FAILED_DEPENDENCY);

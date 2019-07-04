@@ -2,6 +2,7 @@ package es.upm.oeg.librairy.nlp.service.annotator;
 
 import es.upm.oeg.librairy.nlp.annotators.dbpedia.DBpediaAnnotator;
 import es.upm.oeg.librairy.nlp.annotators.dbpedia.DBpediaRestAnnotator;
+import es.upm.oeg.librairy.nlp.annotators.wordnet.*;
 import org.librairy.service.nlp.facade.model.Annotation;
 import org.librairy.service.nlp.facade.model.Form;
 import org.librairy.service.nlp.facade.model.PoS;
@@ -27,9 +28,26 @@ public class DBpediaService  implements AnnotatorService {
 
     DBpediaAnnotator annotator;
 
-    public DBpediaService(String endpoint, Double threshold, String lang, Boolean multigrams, Boolean references, AnnotatorService baseAnnotator) {
+    WordnetAnnotator wordnetAnnotator;
+
+    public DBpediaService(String endpoint, Double threshold, String lang, Boolean multigrams, Boolean references, AnnotatorService baseAnnotator, String resourceFolder) {
 
         this.lang = lang.toLowerCase();
+
+        switch (this.lang){
+            case "en":
+                wordnetAnnotator  = new WordnetAnnotatorEN(resourceFolder);
+                break;
+            case "es":
+                wordnetAnnotator  = new WordnetAnnotatorES(resourceFolder);
+                break;
+            case "de":
+                wordnetAnnotator  = new WordnetAnnotatorDE(resourceFolder);
+                break;
+            case "fr":
+                wordnetAnnotator  = new WordnetAnnotatorFR(resourceFolder);
+                break;
+        }
 
         annotator = new DBpediaRestAnnotator(endpoint.replace("%%",this.lang), threshold, multigrams, references, baseAnnotator);
 
@@ -42,7 +60,7 @@ public class DBpediaService  implements AnnotatorService {
     }
 
     @Override
-    public List<Annotation> annotations(String text, List<PoS> filter) {
+    public List<Annotation> annotations(String text, List<PoS> filter, Boolean synsets) {
 
         List<Annotation> annotations = new ArrayList<>();
         Matcher matcher = Pattern.compile(".{1,1000}(\\.|.$)",Pattern.MULTILINE).matcher(text);
@@ -53,6 +71,7 @@ public class DBpediaService  implements AnnotatorService {
             List<Annotation> partialAnnotations = annotator.annotate(partialContent, filter);
             for(Annotation annotation : partialAnnotations){
                 annotation.setOffset((groupIndex*1000)+annotation.getOffset());
+                if (synsets) annotation.setSynset(wordnetAnnotator.getSynset(annotation.getToken().getLemma()));
             }
             annotations.addAll(partialAnnotations);
             Instant endAnnotation = Instant.now();

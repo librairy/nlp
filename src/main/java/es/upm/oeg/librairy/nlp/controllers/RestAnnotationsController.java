@@ -63,7 +63,7 @@ public class RestAnnotationsController {
 
             String lang = Strings.isNullOrEmpty(request.getLang())? languageService.getLanguage(request.getText()) : request.getLang();
 
-            List<Annotation> annotations = service.annotations(request.getText(), request.getFilter(), request.getMultigrams(), request.getReferences(), lang).stream().map(a -> new Annotation(a)).collect(Collectors.toList());
+            List<Annotation> annotations = service.annotations(request.getText(), request.getFilter(), request.getMultigrams(), request.getReferences(), request.getSynset(), lang).stream().map(a -> new Annotation(a)).collect(Collectors.toList());
             return new ResponseEntity(new AnnotationsResult(annotations), HttpStatus.OK);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down", HttpStatus.FAILED_DEPENDENCY);

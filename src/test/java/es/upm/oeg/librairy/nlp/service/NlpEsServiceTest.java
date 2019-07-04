@@ -26,7 +26,7 @@ public class NlpEsServiceTest {
 
     @Before
     public void setup(){
-        service = new CoreNLPService("es");
+        service = new CoreNLPService("es","src/main/bin");
     }
 
     @Test
@@ -36,7 +36,7 @@ public class NlpEsServiceTest {
 
         List<PoS> filter = Collections.emptyList();
 
-        List<Annotation> annotations = service.annotations(text, filter);
+        List<Annotation> annotations = service.annotations(text, filter, false);
 
         Assert.assertEquals(5, annotations.size());
 

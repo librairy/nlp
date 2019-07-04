@@ -74,7 +74,7 @@ public class AvroIntTest {
 
         texts.forEach(text -> {
             try {
-                client.annotations(text, Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB, PoS.ADVERB, PoS.ADJECTIVE}), false, false, "es");
+                client.annotations(text, Arrays.asList(new PoS[]{PoS.NOUN, PoS.VERB, PoS.ADVERB, PoS.ADJECTIVE}), false, false, false, "es");
             } catch (AvroRemoteException e) {
                 e.printStackTrace();
             }

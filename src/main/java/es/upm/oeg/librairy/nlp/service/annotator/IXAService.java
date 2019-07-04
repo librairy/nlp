@@ -3,6 +3,7 @@ package es.upm.oeg.librairy.nlp.service.annotator;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import es.upm.oeg.librairy.nlp.annotators.ixa.*;
+import es.upm.oeg.librairy.nlp.annotators.wordnet.*;
 import eus.ixa.ixa.pipe.pos.CLI;
 import ixa.kaflib.KAFDocument;
 import ixa.kaflib.Span;
@@ -26,8 +27,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.apache.coyote.http11.Constants.a;
-
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
  */
@@ -44,21 +43,27 @@ public class IXAService implements AnnotatorService {
 
     IXAAnnotator annotator;
 
+    WordnetAnnotator wordnetAnnotator;
+
     public IXAService(String resourceFolder, String lang, Boolean multigrams) {
         this.resourceFolder = resourceFolder;
         this.lang = lang.toLowerCase();
         switch (lang.toLowerCase()){
             case "en":
                 annotator = new IXAAnnotatorEN(resourceFolder);
+                wordnetAnnotator = new WordnetAnnotatorEN(resourceFolder);
                 break;
             case "es":
                 annotator = new IXAAnnotatorES(resourceFolder);
+                wordnetAnnotator = new WordnetAnnotatorES(resourceFolder);
                 break;
             case "de":
                 annotator = new IXAAnnotatorDE(resourceFolder);
+                wordnetAnnotator = new WordnetAnnotatorDE(resourceFolder);
                 break;
             case "fr":
                 annotator = new IXAAnnotatorFR(resourceFolder);
+                wordnetAnnotator = new WordnetAnnotatorFR(resourceFolder);
                 break;
 
         }
@@ -77,7 +82,7 @@ public class IXAService implements AnnotatorService {
     }
 
 
-    public List<Annotation> annotations(String text, List<PoS> filter) {
+    public List<Annotation> annotations(String text, List<PoS> filter, Boolean synsets) {
         List<Term> terms = new ArrayList<>();
         Matcher matcher = Pattern.compile(".{1,1000}(\\.|.$)",Pattern.MULTILINE).matcher(text);
         int groupIndex = 0;
@@ -127,6 +132,8 @@ public class IXAService implements AnnotatorService {
                     if (term.getSentiment() != null) annotation.setSentiment(term.getSentiment().getPolarity());
                     annotation.setToken(token);
                     annotation.setOffset(Long.valueOf(term.getSpan().getTargets().get(0).getOffset()));
+
+                    if (synsets) annotation.setSynset(wordnetAnnotator.getSynset(token.getLemma()));
 
                     return annotation;
                 })

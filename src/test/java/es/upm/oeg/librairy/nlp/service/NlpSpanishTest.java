@@ -27,23 +27,34 @@ public class NlpSpanishTest {
     @Before
     public void setup(){
 
-        coreNLPService = new CoreNLPService("es");
-        ixaService      = new IXAService("src/main/bin","es",false);
+        String resourceFolder = "src/main/bin";
+        coreNLPService  = new CoreNLPService("es", resourceFolder);
+        ixaService      = new IXAService(resourceFolder,"es",false);
     }
 
     @Test
-    public void annotation() throws IOException {
+    public void coreNLPannotation() throws IOException {
 
-        String text = "Este es mi primer ejemplo sobre computadores";
+        String text = "Los libros fueron recogidos la semana pasada.";
 
         List<PoS> filter = Collections.emptyList();
 
-        List<Annotation> annotations = coreNLPService.annotations(text, filter);
+        List<Annotation> annotations = coreNLPService.annotations(text, filter, false);
 
         annotations.forEach(annotation -> System.out.println("Annotation: " + annotation));
+    }
 
 
-        List<Annotation> annotations2 = ixaService.annotations(text, filter);
+    @Test
+    public void IXAannotation() throws IOException {
+
+        //String text = "Los libros fueron recogidos la semana pasada.";
+
+        String text = "Esto es un ejemplo.";
+
+        List<PoS> filter = Collections.emptyList();
+
+        List<Annotation> annotations2 = ixaService.annotations(text, filter, false);
         annotations2.forEach(annotation -> System.out.println("Annotation2: " + annotation));
 
 
