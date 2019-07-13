@@ -85,7 +85,12 @@ public class CoreNLPService implements AnnotatorService{
                     a.setOffset((groupIndex*1000)+a.getOffset());
                 }
                 if (synset){
-                    annotations.forEach(a -> a.setSynset(wordnetAnnotator.getSynset(a.getToken().getLemma())));
+                    for(org.librairy.service.nlp.facade.model.Annotation a : annotations){
+                        List<String> val = wordnetAnnotator.getSynset(a.getToken().getLemma());
+                        if (val.isEmpty()) val = wordnetAnnotator.getSynset(a.getToken().getTarget());
+                        a.setSynset(val);
+                    }
+
                 }
                 tokens.addAll(annotations);
             }catch (Exception e){

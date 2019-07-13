@@ -11,7 +11,7 @@
 
 	<groupId>es.upm.oeg.librairy</groupId>
     <artifactId>librairy-nlp</artifactId>
-    <version>1.4</version>
+    <version>1.4.2</version>
     <packaging>jar</packaging>
     <name>librairy-nlp</name>
     <description>NLP tasks available by HTTP-REST and AVRO APIs</description>
@@ -63,7 +63,7 @@
         <!-- Project Dependencies -->
         <commons-lang3.version>3.5</commons-lang3.version>
         <httpclient.version>4.5.5</httpclient.version>
-        <ixa.pos.version>1.5.3</ixa.pos.version><!-- 1.5.2 -->
+        <ixa.pos.version>1.5.2</ixa.pos.version><!-- 1.5.2 -->
         <ixa.tok.version>1.8.6</ixa.tok.version>
         <io.version>2.6</io.version>
         <joda.version>2.9.9</joda.version>

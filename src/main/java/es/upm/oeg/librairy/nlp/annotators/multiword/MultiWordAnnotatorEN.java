@@ -22,7 +22,7 @@ public class MultiWordAnnotatorEN extends StanfordAnnotatorEN {
 
         // jMWE
         //props.setProperty("customAnnotatorClass.jmwe", "edu.stanford.nlp.pipeline.JMWEAnnotator");
-        props.setProperty("customAnnotatorClass.jmwe", "es.upm.oeg.librairy.nlp.annotators.wordnet.CustomMWEAnnotator");
+        props.setProperty("customAnnotatorClass.jmwe", "es.upm.oeg.librairy.nlp.annotators.multiword.CustomMWEAnnotator");
         props.setProperty("customAnnotatorClass.jmwe.verbose", "false");
         props.setProperty("customAnnotatorClass.jmwe.underscoreReplacement", "-");
         props.setProperty("customAnnotatorClass.jmwe.indexData", Paths.get(resourceFolder,"mwe","en","mweindex_wordnet3.0_semcor1.6.txt").toFile().getAbsolutePath());

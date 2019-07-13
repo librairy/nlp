@@ -28,21 +28,9 @@ public class NlpSpanishTest {
     public void setup(){
 
         String resourceFolder = "src/main/bin";
-        coreNLPService  = new CoreNLPService("es", resourceFolder);
         ixaService      = new IXAService(resourceFolder,"es",false);
     }
 
-    @Test
-    public void coreNLPannotation() throws IOException {
-
-        String text = "Los libros fueron recogidos la semana pasada.";
-
-        List<PoS> filter = Collections.emptyList();
-
-        List<Annotation> annotations = coreNLPService.annotations(text, filter, false);
-
-        annotations.forEach(annotation -> System.out.println("Annotation: " + annotation));
-    }
 
 
     @Test

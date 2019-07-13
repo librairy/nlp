@@ -71,7 +71,11 @@ public class DBpediaService  implements AnnotatorService {
             List<Annotation> partialAnnotations = annotator.annotate(partialContent, filter);
             for(Annotation annotation : partialAnnotations){
                 annotation.setOffset((groupIndex*1000)+annotation.getOffset());
-                if (synsets) annotation.setSynset(wordnetAnnotator.getSynset(annotation.getToken().getLemma()));
+                if (synsets){
+                    List<String> val = wordnetAnnotator.getSynset(annotation.getToken().getLemma());
+                    if (val.isEmpty()) val = wordnetAnnotator.getSynset(annotation.getToken().getTarget());
+                    annotation.setSynset(val);
+                }
             }
             annotations.addAll(partialAnnotations);
             Instant endAnnotation = Instant.now();

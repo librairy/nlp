@@ -133,7 +133,11 @@ public class IXAService implements AnnotatorService {
                     annotation.setToken(token);
                     annotation.setOffset(Long.valueOf(term.getSpan().getTargets().get(0).getOffset()));
 
-                    if (synsets) annotation.setSynset(wordnetAnnotator.getSynset(token.getLemma()));
+                    if (synsets){
+                        List<String> val = wordnetAnnotator.getSynset(token.getLemma());
+                        if (val.isEmpty()) val = wordnetAnnotator.getSynset(token.getTarget());
+                        annotation.setSynset(val);
+                    }
 
                     return annotation;
                 })
