@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
@@ -29,12 +32,12 @@ public class WordnetTest {
         IndexReader indexReader = new IndexReader(idxFile);
 
 
-        List<String> synsets = indexReader.get("biotecnologia");
+        List<String> synsets = indexReader.get("educacion");
         LOG.info(String.valueOf(synsets));
 
     }
 
-    @Test
+    //@Test
     public void createIndexes() throws IOException {
         BufferedReader reader = ReaderUtils.from("src/test/resources/wordnet/wn-wikt-deu.tab");
 
@@ -44,31 +47,40 @@ public class WordnetTest {
 
         IndexWriter index = new IndexWriter(idxFile);
         Optional<String> synset = Optional.empty();
-        StringBuffer content = new StringBuffer();
+        List<String> content = new ArrayList<>();
         int counter = 0;
         while((row = reader.readLine()) != null){
             if (row.startsWith("#")) continue;
             String[] data = row.split("\t");
             if (synset.isPresent() && synset.get().equals(data[0])){
-                content.append(data[1]).append(" ");
+                content.add(data[1]);
+                content.add(cleanString(data[1]));
                 continue;
             }else if (synset.isPresent()){
                 // save data
                 //LOG.info("saved: '" + synset.get() + "' -> " + content);
-                index.add(synset.get(),content.toString());
+                String terms = content.stream().distinct().collect(Collectors.joining(" "));
+                index.add(synset.get(),terms);
                 counter++;
             }
 
             // initialize data
             synset = Optional.of(data[0]);
-            content.delete(0,content.length());
-            content.append(data[1]).append(" ");
+            content.clear();
+            content.add(data[1]);
+            content.add(cleanString(data[1]));
         }
 
         index.commit();
 
         reader.close();
         LOG.info(counter + " synsets indexed at " + idxFile.getAbsolutePath());
+    }
+
+    public static String cleanString(String texto) {
+        texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
+        texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return texto;
     }
 
 }
