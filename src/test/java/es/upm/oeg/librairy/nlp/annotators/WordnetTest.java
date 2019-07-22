@@ -28,11 +28,11 @@ public class WordnetTest {
     @Test
     public void query() throws IOException {
 
-        File idxFile = new File("src/main/bin/wordnet/spanish.idx");
+        File idxFile = new File("src/main/bin/wordnet/french.idx");
         IndexReader indexReader = new IndexReader(idxFile);
 
 
-        List<String> synsets = indexReader.get("educacion");
+        List<String> synsets = indexReader.get("réseau");
         LOG.info(String.valueOf(synsets));
 
     }
