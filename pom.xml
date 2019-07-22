@@ -11,7 +11,7 @@
 
 	<groupId>es.upm.oeg.librairy</groupId>
     <artifactId>librairy-nlp</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
     <packaging>jar</packaging>
     <name>librairy-nlp</name>
     <description>NLP tasks available by HTTP-REST and AVRO APIs</description>
@@ -74,7 +74,7 @@
 		<librairy.nlp.version>[1.0,)</librairy.nlp.version>
         <librairy.swagger.version>[0.1,)</librairy.swagger.version>
         <lucene.version>7.3.1</lucene.version> <!-- 4.10.4 -->
-        <stanford.version>3.9.2</stanford.version>
+        <stanford.version>3.9.2</stanford.version> <!-- 3.9.2 -->
         <stanford.parser.version>1.0</stanford.parser.version>
         <springfox.version>2.7.0</springfox.version>
         <unirest.version>1.4.9</unirest.version>

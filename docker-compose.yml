@@ -16,6 +16,10 @@ services:
     image: dbpedia/spotlight-spanish:latest
     command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=15 -Dthreads.core=15 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/es  http://0.0.0.0:80/rest
     restart: always
+  dbpedia-it-spotlight:
+    image: dbpedia/spotlight-italian:latest
+    command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=15 -Dthreads.core=15 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/it  http://0.0.0.0:80/rest
+    restart: always
   nlp:
     image: librairy/nlp:latest
     restart: always

@@ -44,7 +44,12 @@ public class DBpediaRestAnnotator implements DBpediaAnnotator {
 
     @Override
     public List<Annotation> annotate(String text, List<PoS> filter) {
-        return addDBpediaReferences(baseAnnotator.annotations(text,filter,false),text,multigrams,references);
+        try{
+            return addDBpediaReferences(baseAnnotator.annotations(text,filter,false),text,multigrams,references);
+        }catch (Exception e){
+            LOG.error("DBpedia connection error", e);
+            return Collections.emptyList();
+        }
     }
 
     private List<Annotation> request(String text){

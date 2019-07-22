@@ -47,6 +47,9 @@ public class DBpediaService  implements AnnotatorService {
             case "fr":
                 wordnetAnnotator  = new WordnetAnnotatorFR(resourceFolder);
                 break;
+            case "it":
+                wordnetAnnotator  = new WordnetAnnotatorIT(resourceFolder);
+                break;
         }
 
         annotator = new DBpediaRestAnnotator(endpoint.replace("%%",this.lang), threshold, multigrams, references, baseAnnotator);

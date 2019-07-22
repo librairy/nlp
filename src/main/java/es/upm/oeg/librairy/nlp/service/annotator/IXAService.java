@@ -65,6 +65,11 @@ public class IXAService implements AnnotatorService {
                 annotator = new IXAAnnotatorFR(resourceFolder);
                 wordnetAnnotator = new WordnetAnnotatorFR(resourceFolder);
                 break;
+            case "it":
+                annotator = new IXAAnnotatorIT(resourceFolder);
+                wordnetAnnotator = new WordnetAnnotatorIT(resourceFolder);
+                break;
+
 
         }
     }

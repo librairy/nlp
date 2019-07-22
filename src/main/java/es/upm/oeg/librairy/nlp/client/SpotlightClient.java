@@ -92,7 +92,7 @@ public class SpotlightClient {
         } catch (IOException e)
         {
             LOG.error("Fatal transport error: " + e.getMessage());
-            throw new Exception("Transport error executing HTTP request.", e);
+            return "";
         }
         finally
         {
