@@ -11,7 +11,7 @@
 
 	<groupId>es.upm.oeg.librairy</groupId>
     <artifactId>librairy-nlp</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
     <packaging>jar</packaging>
     <name>librairy-nlp</name>
     <description>NLP tasks available by HTTP-REST and AVRO APIs</description>

@@ -65,7 +65,7 @@ public class IndexReader {
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 Document doc = reader.document(scoreDoc.doc);
                 String id = String.format(doc.get("name"));
-                LOG.info(""+String.format(doc.get("name")+" - " + String.format(doc.get("body"))));
+                LOG.debug(""+String.format(doc.get("name")+" - " + String.format(doc.get("body"))));
                 docs.add(id);
             }
 
