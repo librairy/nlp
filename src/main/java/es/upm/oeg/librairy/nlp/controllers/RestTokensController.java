@@ -1,6 +1,7 @@
 package es.upm.oeg.librairy.nlp.controllers;
 
 import com.google.common.base.Strings;
+import es.upm.oeg.librairy.nlp.error.LanguageNotFoundException;
 import es.upm.oeg.librairy.nlp.service.LanguageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,7 +65,12 @@ public class RestTokensController {
             return new ResponseEntity(new TokensResult(service.tokens(request.getText(), request.getFilter(), request.getForm(), request.getMultigrams(), lang)), HttpStatus.OK);
         } catch (AvroRemoteException e) {
             return new ResponseEntity("internal service seems down", HttpStatus.FAILED_DEPENDENCY);
+        } catch (LanguageNotFoundException e) {
+            return new ResponseEntity("language not found: " + e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
+            if (e.getCause() instanceof LanguageNotFoundException){
+                return new ResponseEntity("language not found: " + e.getCause().getMessage(), HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity("internal error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

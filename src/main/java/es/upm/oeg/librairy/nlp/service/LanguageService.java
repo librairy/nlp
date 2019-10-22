@@ -45,13 +45,10 @@ public class LanguageService {
 
         Iterator it = BuiltInLanguages.getLanguages().iterator();
 
-        List<String> availableLangs = Arrays.asList(new String[]{"en","es","fr","de","it"});
         while(it.hasNext()) {
             LdLocale locale = (LdLocale)it.next();
-            if (availableLangs.contains(locale.getLanguage())) {
-                LOG.info("language added: " + locale);
-                languageProfiles.add(langReader.readBuiltIn(locale));
-            }
+            LOG.info("language added: " + locale);
+            languageProfiles.add(langReader.readBuiltIn(locale));
         }
 
 
@@ -75,6 +72,16 @@ public class LanguageService {
         }
         String language = lang.get().getLanguage();
         return language;
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        LanguageService service = new LanguageService();
+        service.setup();
+
+        String txt = "Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 1 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 2 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 3 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 4 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 5 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 6 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 7 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 8 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 9 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 10 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 11 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 12 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 13 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 14 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 15 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 16 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 17 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 18 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 19 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 20 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 21 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 22 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 23 do SIWZ .   Przedmiot zamowienia nalezy zrealizowac w oparciu o zalozenia okreslone w opisie przedmiotu zamowienia zawartym w Specyfikacji asortymentowo-cenowej stanowiacej zalacznik nr 2 . 24 do SIWZ ";
+
+        LOG.info(service.getLanguage(txt));
     }
 
 }

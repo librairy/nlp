@@ -15,6 +15,11 @@ And all this by means of json-based queries via HTTP or TCP request deployed wit
 
 ## Quick Start
 
+### Demo
+- An online service is available at:  [http://librairy.linkeddata.es/nlp](http://librairy.linkeddata.es/nlp)
+
+This is oriented to small load tests. If you need more resources it is recommended to start an instance on your servers.
+
 ### Run locally
 1. Install [Docker](https://docs.docker.com/install/)
 1. Run the service by:
@@ -37,7 +42,7 @@ It can be tuned using the following environment variables when defining the [Doc
 | `REST_PORT`  |HTTP  listening port  (`7777` by default)  |
 | `NLP_AVRO_PORT`  |TCP  listening port (`65111` by default)   |
 | `SPOTLIGHT_ENDPOINT`   | [DBpedia Spotlight](https://www.dbpedia-spotlight.org) url (*required to discover Wikipedia references*)|
-| `SPOTLIGHT_THRESHOLD`   | Minimum score (*required to discover Wikipedia references*)|
+| `SPOTLIGHT_THRESHOLD`   | Confidence (*required to discover Wikipedia references*)|
 
 
 ## Services

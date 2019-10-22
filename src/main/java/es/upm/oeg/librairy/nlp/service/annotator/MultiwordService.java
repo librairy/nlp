@@ -14,7 +14,7 @@ public class MultiwordService extends CoreNLPService{
     private final String lang;
 
     public MultiwordService(String resourceFolder, String lang) {
-        super("--",resourceFolder);
+        super(lang.toLowerCase(),resourceFolder);
         this.lang = lang.toLowerCase();
         stanfordAnnotator =  new MultiWordAnnotatorEN(resourceFolder);
     }

@@ -4,6 +4,7 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Strings;
 import es.upm.oeg.librairy.nlp.annotators.ixa.*;
 import es.upm.oeg.librairy.nlp.annotators.wordnet.*;
+import es.upm.oeg.librairy.nlp.error.LanguageNotFoundException;
 import eus.ixa.ixa.pipe.pos.CLI;
 import ixa.kaflib.KAFDocument;
 import ixa.kaflib.Span;
@@ -69,8 +70,7 @@ public class IXAService implements AnnotatorService {
                 annotator = new IXAAnnotatorIT(resourceFolder);
                 wordnetAnnotator = new WordnetAnnotatorIT(resourceFolder);
                 break;
-
-
+            default: throw new LanguageNotFoundException(this.lang);
         }
     }
 

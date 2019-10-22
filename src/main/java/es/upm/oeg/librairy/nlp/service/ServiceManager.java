@@ -3,6 +3,7 @@ package es.upm.oeg.librairy.nlp.service;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import es.upm.oeg.librairy.nlp.error.LanguageNotFoundException;
 import es.upm.oeg.librairy.nlp.service.annotator.AnnotatorService;
 import es.upm.oeg.librairy.nlp.service.annotator.CoreNLPService;
 import es.upm.oeg.librairy.nlp.service.annotator.DBpediaService;
@@ -59,22 +60,11 @@ public class ServiceManager {
                                         case "en":
                                             //return (req.getMultigram())? new WordnetService(resourceFolder, lang) : new CoreNLPService(lang);
                                             return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
-                                        case "es":
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
-                                            //return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
-                                        case "de":
-                                            //return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
-                                        case "fr":
-                                            //return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
-                                        case "it":
-                                            //return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
                                         default:
-                                            LOG.error("language '"+ lang + "' not supported");
-                                            throw new RuntimeException("language not supported: " + lang);
+                                           return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
                                     }
+                                }catch(LanguageNotFoundException e){
+                                    throw e;
                                 }catch(Exception e){
                                     LOG.error("Unexpected error",e);
                                     throw new ExecutionException(e);
@@ -89,6 +79,8 @@ public class ServiceManager {
             Long key = getKey(thread.getId());
             String lang = language.toLowerCase();
             return annotators.get(new Request(key,lang, multigram, references));
+        } catch (LanguageNotFoundException e) {
+            throw e;
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }

@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import edu.stanford.nlp.pipeline.Annotation;
 import es.upm.oeg.librairy.nlp.annotators.stanford.*;
 import es.upm.oeg.librairy.nlp.annotators.wordnet.*;
+import es.upm.oeg.librairy.nlp.error.LanguageNotFoundException;
 import org.librairy.service.nlp.facade.model.Form;
 import org.librairy.service.nlp.facade.model.PoS;
 import org.slf4j.Logger;
@@ -48,6 +49,7 @@ public class CoreNLPService implements AnnotatorService{
                 stanfordAnnotator = new StanfordAnnotatorFR();
                 wordnetAnnotator  = new WordnetAnnotatorFR(resourceFolder);
                 break;
+            default: throw new LanguageNotFoundException(lang);
         }
     }
 
