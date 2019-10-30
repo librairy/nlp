@@ -36,6 +36,8 @@ public class LanguageService {
     private LanguageDetector languageDetector;
     private TextObjectFactory textObjectFactory;
 
+    private List<String> availableLangs = Arrays.asList(new String[]{"en","es","fr","de","it"});
+
     @PostConstruct
     public void setup() throws IOException {
         //load all languages:
@@ -47,13 +49,16 @@ public class LanguageService {
 
         while(it.hasNext()) {
             LdLocale locale = (LdLocale)it.next();
-            LOG.info("language added: " + locale);
-            languageProfiles.add(langReader.readBuiltIn(locale));
+            if (availableLangs.contains(locale.getLanguage())){
+                languageProfiles.add(langReader.readBuiltIn(locale));
+                LOG.info("language added: " + locale);
+            }
         }
 
 
         //build language detector:
         this.languageDetector = LanguageDetectorBuilder.create(NgramExtractors.standard())
+                .minimalConfidence(0.75)
                 .withProfiles(languageProfiles)
                 .build();
 
@@ -67,11 +72,7 @@ public class LanguageService {
 
         TextObject textObject   = textObjectFactory.forText(text);
         Optional<LdLocale> lang = languageDetector.detect(textObject);
-        if (!lang.isPresent()){
-            lang = Optional.of(LdLocale.fromString(DEFAULT_LANG));
-        }
-        String language = lang.get().getLanguage();
-        return language;
+        return (!lang.isPresent())? "unknown" : lang.get().getLanguage();
     }
 
 
