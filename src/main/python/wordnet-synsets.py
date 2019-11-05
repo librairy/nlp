@@ -12,7 +12,7 @@ from nltk.corpus import wordnet as w
 wnname = "Open MultiLingual WordNet"
 wnurl = "http://wordnet.princeton.edu/"
 wnlicense = "wordnet"
-languages = ["eng","spa","fra","ita"]
+languages = ["eng","spa","fra","ita","por"]
 for wnlang in languages:
     outfile = "wn-data-%s.tab" % wnlang
     o = codecs.open(outfile, "w", "utf-8" )

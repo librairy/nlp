@@ -130,7 +130,7 @@ public class IXAService implements AnnotatorService {
                     }
 
                     token.setMorphoFeat(!Strings.isNullOrEmpty(term.getMorphofeat())?term.getMorphofeat():"");
-                    token.setPos(!Strings.isNullOrEmpty(term.getPos())? IXAPoSTranslator.toPoSTag(term.getPos()):PoS.NOUN);
+                    token.setPos(!Strings.isNullOrEmpty(term.getPos())? IXAPoSTranslator.toPoSTag(term.getPos()):PoS.SYMBOL);
                     token.setType(!Strings.isNullOrEmpty(term.getType())?term.getType():"");
 
                     Annotation annotation = new Annotation();
