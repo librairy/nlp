@@ -89,12 +89,12 @@ public class OpenNLPService implements AnnotatorService {
 
     private List<Annotation> annotate(String text, List<PoS> filter){
         List<Annotation> annotations = new ArrayList<>();
-        Matcher matcher = Pattern.compile(".{1,1000}(\\.|.$)",Pattern.MULTILINE).matcher(text);
+        Matcher matcher = Pattern.compile(".{1,1000}(\\. |.$)",Pattern.MULTILINE).matcher(text);
         long offset = 0l;
         while (matcher.find()){
             String partialContent = matcher.group();
             Instant startAnnotation = Instant.now();
-            List<Token> tokens = annotator.tokenize(text, multigrams);
+            List<Token> tokens = annotator.tokenize(partialContent, multigrams);
             for(Token token: tokens){
                 offset++;
                 if (!filter.isEmpty() && !filter.contains(token.getPos())){

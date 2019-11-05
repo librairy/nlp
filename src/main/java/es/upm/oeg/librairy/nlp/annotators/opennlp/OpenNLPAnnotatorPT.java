@@ -90,7 +90,6 @@ public class OpenNLPAnnotatorPT implements OpenNLPAnnotator {
                 token.setLemma(lemmas[i]);
                 token.setPos(OpenNLPPoSTranslator.toPoSTag(tags[i]));
                 tokenList.add(token);
-                //TODO add offset
             }
 
         }

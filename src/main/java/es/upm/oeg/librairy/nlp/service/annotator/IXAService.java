@@ -76,11 +76,12 @@ public class IXAService implements AnnotatorService {
 
     public String tokens(String text, List<PoS> filter, Form form)  {
 
-        return analyze(text,filter).stream()
-                .map(term-> {
+        return annotations(text,filter,false).stream()
+                .map(annotation-> {
+                    Token token = annotation.getToken();
                     switch (form){
-                        case LEMMA: return Strings.isNullOrEmpty(term.getLemma())? term.getStr() : term.getLemma();
-                        default: return term.getStr();
+                        case LEMMA: return Strings.isNullOrEmpty(token.getLemma())? token.getTarget() : token.getLemma();
+                        default: return token.getTarget();
                     }
                 })
                 .collect(Collectors.joining(" "));
@@ -89,7 +90,7 @@ public class IXAService implements AnnotatorService {
 
     public List<Annotation> annotations(String text, List<PoS> filter, Boolean synsets) {
         List<Term> terms = new ArrayList<>();
-        Matcher matcher = Pattern.compile(".{1,1000}(\\.|.$)",Pattern.MULTILINE).matcher(text);
+        Matcher matcher = Pattern.compile(".{1,1000}(\\. |.$)",Pattern.MULTILINE).matcher(text);
         int groupIndex = 0;
         while (matcher.find()){
             String partialContent = matcher.group();

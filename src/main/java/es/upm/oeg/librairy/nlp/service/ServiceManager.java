@@ -46,7 +46,7 @@ public class ServiceManager {
         numParallel = Math.min(availableThreads, maxThreads);
 
         annotators = CacheBuilder.newBuilder()
-                .expireAfterAccess(1, TimeUnit.MINUTES)
+                .expireAfterAccess(10, TimeUnit.MINUTES)
                 .build(
                         new CacheLoader<Request, AnnotatorService>() {
                             public AnnotatorService load(Request req) throws ExecutionException {
@@ -58,9 +58,9 @@ public class ServiceManager {
                                             //return (req.getMultigram())? new WordnetService(resourceFolder, lang) : new CoreNLPService(lang);
                                             return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
                                         case "pt":
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new OpenNLPService(resourceFolder, lang, req.getMultigram()), resourceFolder) : new OpenNLPService(resourceFolder, lang, req.getMultigram());
+                                            return (req.getReferences())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new OpenNLPService(resourceFolder, lang, req.getMultigram()), resourceFolder) : new OpenNLPService(resourceFolder, lang, req.getMultigram());
                                         default:
-                                           return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
+                                           return (req.getReferences())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
                                     }
                                 }catch(LanguageNotFoundException e){
                                     throw e;

@@ -40,7 +40,8 @@ public class OpenNLPPoSTranslator {
             case "PUNC":     return PoS.PUNCTUATION_MARK;
             case "CONJ":     return PoS.CONJUNCTION;
             case "IN":     return PoS.INTERJECTION;
-            default:      throw new RuntimeException("Term PoS not handled: " + termPoS);
+            case "PP":      return PoS.PREPOSITION;
+            default:      return PoS.SYMBOL;
         }
     }
 
