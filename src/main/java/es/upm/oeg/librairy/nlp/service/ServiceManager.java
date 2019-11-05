@@ -4,10 +4,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import es.upm.oeg.librairy.nlp.error.LanguageNotFoundException;
-import es.upm.oeg.librairy.nlp.service.annotator.AnnotatorService;
-import es.upm.oeg.librairy.nlp.service.annotator.CoreNLPService;
-import es.upm.oeg.librairy.nlp.service.annotator.DBpediaService;
-import es.upm.oeg.librairy.nlp.service.annotator.IXAService;
+import es.upm.oeg.librairy.nlp.service.annotator.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +57,8 @@ public class ServiceManager {
                                         case "en":
                                             //return (req.getMultigram())? new WordnetService(resourceFolder, lang) : new CoreNLPService(lang);
                                             return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
+                                        case "pt":
+                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new OpenNLPService(resourceFolder, lang, req.getMultigram()), resourceFolder) : new OpenNLPService(resourceFolder, lang, req.getMultigram());
                                         default:
                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new IXAService(resourceFolder,lang, req.getMultigram()), resourceFolder) : new IXAService(resourceFolder,lang, req.getMultigram());
                                     }

@@ -79,8 +79,8 @@ public class IXAService implements AnnotatorService {
         return analyze(text,filter).stream()
                 .map(term-> {
                     switch (form){
-                        case LEMMA: return Strings.isNullOrEmpty(term.getLemma())? term.getStr() : term.getLemma().toLowerCase();
-                        default: return term.getStr().toLowerCase();
+                        case LEMMA: return Strings.isNullOrEmpty(term.getLemma())? term.getStr() : term.getLemma();
+                        default: return term.getStr();
                     }
                 })
                 .collect(Collectors.joining(" "));

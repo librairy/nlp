@@ -1,8 +1,9 @@
 package es.upm.oeg.librairy.nlp.service;
 
+import es.upm.oeg.librairy.nlp.annotators.opennlp.OpenNLPAnnotatorPT;
 import es.upm.oeg.librairy.nlp.service.annotator.CoreNLPService;
 import es.upm.oeg.librairy.nlp.service.annotator.IXAService;
-import es.upm.oeg.librairy.nlp.service.annotator.PortugueseService;
+import es.upm.oeg.librairy.nlp.service.annotator.OpenNLPService;
 import org.junit.Before;
 import org.junit.Test;
 import org.librairy.service.nlp.facade.model.Annotation;
@@ -23,13 +24,14 @@ import java.util.List;
 public class NlpPortugueseTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(NlpPortugueseTest.class);
-    private PortugueseService service;
+
+    private OpenNLPService service;
 
     @Before
     public void setup() throws Exception {
 
         String resourceFolder = "src/main/bin";
-        service      = new PortugueseService(resourceFolder);
+        service = new OpenNLPService(resourceFolder, "pt", false);
     }
 
 

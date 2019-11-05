@@ -1,5 +1,9 @@
 version: '2'
 services:
+  dbpedia-pt-spotlight:
+    image: dbpedia/spotlight-portuguese:latest
+    command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=15 -Dthreads.core=15 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/pt  http://0.0.0.0:80/rest
+    restart: always
   dbpedia-fr-spotlight:
     image: dbpedia/spotlight-french:latest
     command: java -Dfile.encoding=UTF-8 -Xmx15G -Dthreads.max=15 -Dthreads.core=15 -jar /opt/spotlight/dbpedia-spotlight-nightly-build.jar /opt/spotlight/fr  http://0.0.0.0:80/rest
