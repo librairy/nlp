@@ -56,7 +56,7 @@ public class ServiceManager {
                                     switch (lang){
                                         case "en":
                                             //return (req.getMultigram())? new WordnetService(resourceFolder, lang) : new CoreNLPService(lang);
-                                            return (req.getMultigram())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
+                                            return (req.getMultigram() || req.getReferences())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new CoreNLPService(lang, resourceFolder), resourceFolder) : new CoreNLPService(lang, resourceFolder);
                                         case "pt":
                                             return (req.getReferences())? new DBpediaService(endpoint, threshold, lang, req.getMultigram(), req.references, new OpenNLPService(resourceFolder, lang, req.getMultigram()), resourceFolder) : new OpenNLPService(resourceFolder, lang, req.getMultigram());
                                         default:

@@ -65,7 +65,7 @@ public class CoreNLPService implements AnnotatorService{
         if (Strings.isNullOrEmpty(text)) return Collections.emptyList();
 
         List<org.librairy.service.nlp.facade.model.Annotation> tokens = new ArrayList<>();
-        Matcher matcher = Pattern.compile(".{1,1000}(\\. |.$)", Pattern.MULTILINE).matcher(text);
+        Matcher matcher = Pattern.compile("(.{1,3000}\\.)|(.{1,3000}.$)|(.{1,3000};)", Pattern.MULTILINE).matcher(text);
         int groupIndex = 0;
         while (matcher.find()){
 

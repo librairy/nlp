@@ -85,7 +85,7 @@ public class DBpediaRestAnnotator implements DBpediaAnnotator {
                         Token token = new Token();
                         token.setTarget(target);
                         token.setLemma(target.toLowerCase().replace(" ","_"));
-                        if (target.contains(" ")) token.setPos(PoS.NOUN);
+                        token.setPos(PoS.NOUN);
 
                         Annotation annotation = new Annotation();
                         annotation.setToken(token);

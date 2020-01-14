@@ -89,7 +89,7 @@ public class OpenNLPService implements AnnotatorService {
 
     private List<Annotation> annotate(String text, List<PoS> filter){
         List<Annotation> annotations = new ArrayList<>();
-        Matcher matcher = Pattern.compile(".{1,1000}(\\. |.$)",Pattern.MULTILINE).matcher(text);
+        Matcher matcher = Pattern.compile("(.{1,3000}\\.)|(.{1,3000}.$)|(.{1,3000};)",Pattern.MULTILINE).matcher(text);
         long offset = 0l;
         while (matcher.find()){
             String partialContent = matcher.group();

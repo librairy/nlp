@@ -37,6 +37,8 @@ public class StanfordAnnotatorEN extends CoreNLPAnnotator {
 
                 if (posTag.startsWith("dt")) return PoS.ARTICLE;
 
+                if (posTag.startsWith("ex")) return PoS.ADVERB;
+
                 if (posTag.startsWith("in")) return PoS.PREPOSITION;
 
                 if (posTag.startsWith("jj")) return PoS.ADJECTIVE;
@@ -53,9 +55,21 @@ public class StanfordAnnotatorEN extends CoreNLPAnnotator {
 
                 if (posTag.startsWith("rb")) return PoS.ADVERB;
 
+                if (posTag.startsWith("rp")) return PoS.ARTICLE;
+
+                if (posTag.startsWith("to")) return PoS.ARTICLE;
+
+                if (posTag.startsWith(",")) return PoS.PUNCTUATION_MARK;
+
                 if (posTag.startsWith("uh")) return PoS.INTERJECTION;
 
                 if (posTag.startsWith("vb")) return PoS.VERB;
+
+                if (posTag.startsWith("wdt")) return PoS.ARTICLE;
+
+                if (posTag.startsWith("wp")) return PoS.PRONOUN;
+
+                if (posTag.startsWith("wrb")) return PoS.ADVERB;
 
                 return PoS.SYMBOL;
         }

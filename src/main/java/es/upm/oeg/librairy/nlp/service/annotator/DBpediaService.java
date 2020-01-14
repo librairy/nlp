@@ -66,7 +66,7 @@ public class DBpediaService  implements AnnotatorService {
     public List<Annotation> annotations(String text, List<PoS> filter, Boolean synsets) {
 
         List<Annotation> annotations = new ArrayList<>();
-        Matcher matcher = Pattern.compile(".{1,1000}(\\.|.$)",Pattern.MULTILINE).matcher(text);
+        Matcher matcher = Pattern.compile("(.{1,3000}\\.)|(.{1,3000}.$)|(.{1,3000};)",Pattern.MULTILINE).matcher(text);
         int groupIndex = 0;
         while (matcher.find()){
             String partialContent = matcher.group();
