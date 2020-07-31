@@ -39,7 +39,7 @@ public class NLPServiceImpl implements org.librairy.service.nlp.facade.model.Nlp
     }
 
     @Override
-    public List<Annotation> annotations(String text, List<PoS> filter, boolean multigrams, boolean references, boolean synsets, String lang) throws AvroRemoteException {
+    public List<Annotation> annotations(String text, List<PoS> filter, Boolean multigrams, Boolean references, Boolean synsets, String lang) throws AvroRemoteException {
 
         List<Annotation> annotations = annotate(text, filter, multigrams, references, synsets, lang);
 
@@ -47,9 +47,9 @@ public class NLPServiceImpl implements org.librairy.service.nlp.facade.model.Nlp
     }
 
     @Override
-    public List<Group> groups(String text, List<PoS> filter, boolean multigrams, boolean references, boolean synsets, String lang) throws AvroRemoteException {
+    public List<Group> groups(String text, List<PoS> filter, Boolean multigrams, Boolean references, Boolean synsets, String lang) throws AvroRemoteException {
 
-        List<Annotation> annotations = annotate(text, filter, multigrams, references, synsets, lang);
+        List<Annotation> annotations = annotate(text, filter, multigrams==null?false:multigrams, references==null?false:references, synsets==null?false:synsets, lang);
 
         Map<Annotation, Long> grouped = annotations.stream().filter(a -> CharMatcher.javaLetterOrDigit().matchesAnyOf(a.getToken().getLemma())).collect(Collectors.groupingBy(a -> a, Collectors.counting()));
 
@@ -68,9 +68,9 @@ public class NLPServiceImpl implements org.librairy.service.nlp.facade.model.Nlp
 
         Thread thread = Thread.currentThread();
 
-        AnnotatorService annotator = serviceManager.getAnnotator(thread, lang, multigrams, references);
+        AnnotatorService annotator = serviceManager.getAnnotator(thread, lang, multigrams ==null? false:multigrams, references==null?false:references);
 
-        List<Annotation> annotations = annotator.annotations(text,filter, synsets);
+        List<Annotation> annotations = annotator.annotations(text,filter, synsets==null?false:synsets);
 
         return annotations;
     }

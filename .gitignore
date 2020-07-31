@@ -6,6 +6,7 @@ target/
 .idea/
 # Log file
 *.log
+*__pycache__/
 
 # BlueJ files
 *.ctxt
