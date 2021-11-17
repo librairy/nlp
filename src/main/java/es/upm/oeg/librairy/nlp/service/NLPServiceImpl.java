@@ -12,9 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+
+import static org.librairy.service.nlp.facade.model.PoS.ADVERB;
 
 /**
  * @author Badenes Olmedo, Carlos <cbadenes@fi.upm.es>
@@ -46,6 +51,7 @@ public class NLPServiceImpl implements org.librairy.service.nlp.facade.model.Nlp
         return annotations.stream().filter(a -> CharMatcher.javaLetterOrDigit().matchesAnyOf(a.getToken().getLemma())).collect(Collectors.toList());
     }
 
+    // MODIFIED
     @Override
     public List<Group> groups(String text, List<PoS> filter, Boolean multigrams, Boolean references, Boolean synsets, String lang) throws AvroRemoteException {
 
@@ -53,7 +59,7 @@ public class NLPServiceImpl implements org.librairy.service.nlp.facade.model.Nlp
 
         Map<Annotation, Long> grouped = annotations.stream().filter(a -> CharMatcher.javaLetterOrDigit().matchesAnyOf(a.getToken().getLemma())).collect(Collectors.groupingBy(a -> a, Collectors.counting()));
 
-        return grouped.entrySet().stream().map( entry -> {
+        List<Group> processedGroups = grouped.entrySet().stream().map( entry -> {
             org.librairy.service.nlp.facade.model.Annotation annotation = entry.getKey();
             Group group = new Group();
             group.setToken(annotation.getToken().getLemma());
@@ -62,6 +68,110 @@ public class NLPServiceImpl implements org.librairy.service.nlp.facade.model.Nlp
             group.setFreq(entry.getValue());
             return group;
         }).sorted((a,b) -> -a.getFreq().compareTo(b.getFreq())).collect(Collectors.toList());
+
+        if (text != null) {
+            // Checking if the text contains not recognized adverbs
+            // If it does, returns exactly what adverbs of a list is not recognizing
+            String[] arrayOfNotRecognizedAdverbs = getArrayOfNotRecognizedAdverbs(text);
+
+            // If it doesn't return any adverb, finish the process
+            if (arrayOfNotRecognizedAdverbs.length > 0) {
+                // Checking if the AI has detected anything
+                if (!processedGroups.isEmpty()) {
+                    // Checking if each of the 'not recognized adverb' is not a false positive
+                    // If it is, it will appear as a token inside a group
+
+                    // Initialize a HashMap of all not-recognized-adverbs
+                    HashMap<String, Boolean> mapOfFalsePositives = new HashMap<String, Boolean>();
+
+                    // Initialize each of them as 'not false positive' for the moment
+                    for (String notRecognizedAdverb : arrayOfNotRecognizedAdverbs) {
+                        mapOfFalsePositives.put(notRecognizedAdverb, false);
+                    }
+
+                    // Checking each group to identify the false positives
+                    processedGroups.forEach(group -> {
+                        for (String notRecognizedAdverb : arrayOfNotRecognizedAdverbs) {
+                            // If the name of the token of a group is the same as the name of one of the not-recognized
+                            // adverbs, we've encountered a false positive
+                            if (group.getToken().equals(notRecognizedAdverb)) {
+                                // Put it as 'false positive' in the HashMap
+                                mapOfFalsePositives.put(notRecognizedAdverb, true);
+
+                                // Check if the frequency of appearence is correct
+                                if (!group.getFreq().equals((long) getFrequency(notRecognizedAdverb, arrayOfNotRecognizedAdverbs))) {
+                                    // If it is not, overwrite it
+                                    group.setFreq((long) getFrequency(notRecognizedAdverb, arrayOfNotRecognizedAdverbs));
+                                }
+                            }
+                        }
+                    });
+
+                    // Now, for each one of the not-recognized-adverbs, taking in consideration the false positives
+                    // detected before...
+                    mapOfFalsePositives.forEach((key, value) -> {
+                        // If it is not a false positive
+                        if (!value) {
+                            // Add a new group with its name as token, correct PoS and frequency
+                            processedGroups.add(new Group(key, ADVERB, null, (long) getFrequency(key, arrayOfNotRecognizedAdverbs)));
+                        }
+                    });
+                } else {
+                    // Happily, we don't have to check for false positives
+                    // For each one of the not-recognized-adverbs
+                    for (String notRecognizedAdverb : arrayOfNotRecognizedAdverbs) {
+                        // Add a new group with its name as token, correct PoS and frequency
+                        processedGroups.add(new Group(notRecognizedAdverb, ADVERB, null, (long) getFrequency(notRecognizedAdverb, arrayOfNotRecognizedAdverbs)));
+                    }
+                }
+            }
+        }
+
+        return processedGroups;
+    }
+
+    // NEW
+    private int getFrequency(String adverb, String[] arrayOfAdverbsWithPossibleDuplicates) {
+        int frequency = 0;
+        for (int i = 0; i < arrayOfAdverbsWithPossibleDuplicates.length; i++) {
+            if (arrayOfAdverbsWithPossibleDuplicates[i].equals(adverb)) {
+                frequency += 1;
+            }
+        }
+        return frequency;
+    }
+
+    // NEW
+    private String[] getArrayOfNotRecognizedAdverbs(String text) {
+        String [] notRecognizedAdverbs = {"atinadamente", "completamente", "consecuentemente", "convencionalmente", "corrientemente", "cortésmente", "cronológicamente", "eficazmente", "exclusivamente", "experimentalmente", "extremadamente", "frecuentemente", "generalmente", "grandemente", "horizontalmente", "idiomáticamente", "igualmente", "incesantemente", "incidentalmente", "indeleblemente", "indelicadamente", "indirectamente", "indisolublemente", "indudablemente", "ingenuamente", "insistentemente", "instantáneamente", "internamente", "inútilmente", "irregularmente", "irresistiblemente", "lealmente", "libremente", "longitudinalmente", "meramente", "normalmente", "ortográficamente", "parcialmente", "patrióticamente", "precisamente", "preferentemente", "propiamente", "recientemente", "rígidamente", "rudamente", "sintácticamente", "socialmente", "suficientemente", "totalmente"};
+        int textLength = text.length();
+        int notRecognizedAdverbsLength = 0;
+        boolean foundItOnce = false;
+        ArrayList<String> notRecognizedAdverbsInText = new ArrayList<String>();
+        int numberOfNotRecognizedAdverbsInText = 0;
+        int countOfRepeatedElements = 0;
+        for (String notRecognizedAdverb : notRecognizedAdverbs) {
+            notRecognizedAdverbsLength = notRecognizedAdverb.length();
+            foundItOnce = false;
+            countOfRepeatedElements = 0;
+            for (int i = 0; i <= (textLength - notRecognizedAdverbsLength); i++) {
+                if (text.regionMatches(i, notRecognizedAdverb, 0, notRecognizedAdverbsLength)) {
+                    foundItOnce = true;
+                    notRecognizedAdverbsInText.add(text.substring(i, i + notRecognizedAdverbsLength));
+                    countOfRepeatedElements += 1;
+                }
+            }
+            if (foundItOnce)
+                numberOfNotRecognizedAdverbsInText += countOfRepeatedElements;
+        }
+
+        String [] notRecognizedAdverbsInTextStringArray = new String[numberOfNotRecognizedAdverbsInText];
+
+        for (int i = 0; i < numberOfNotRecognizedAdverbsInText; i++) {
+            notRecognizedAdverbsInTextStringArray[i] = notRecognizedAdverbsInText.get(i);
+        }
+
+        return notRecognizedAdverbsInTextStringArray;
     }
 
     private List<Annotation> annotate(String text, List<PoS> filter, Boolean multigrams, Boolean references, Boolean synsets, String lang) throws AvroRemoteException {
