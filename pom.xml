@@ -61,7 +61,7 @@
         <surefire.junit.version>2.12</surefire.junit.version>
 
         <!-- Project Dependencies -->
-        <commons-lang3.version>3.5</commons-lang3.version>
+        <commons-lang3.version>3.18.0</commons-lang3.version>
         <httpclient.version>4.5.5</httpclient.version>
         <ixa.pos.version>1.5.2</ixa.pos.version><!-- 1.5.2 -->
         <ixa.tok.version>1.8.6</ixa.tok.version>
